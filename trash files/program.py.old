@@ -1,0 +1,114 @@
+import tkinter as tk
+import subprocess
+import threading
+
+class NetworkApp(tk.Tk):
+    def __init__(self):
+        super().__init__()
+
+        self.title("Progetto di Networking 2")
+        self.geometry("1000x500")
+
+        self.configure(bg="#f0f0f0")
+
+        self.frame_top = tk.Frame(self, bg="#f0f0f0")
+        self.frame_top.pack(fill=tk.BOTH, expand=True, padx=20, pady=10)
+
+        self.image_path = "network_image.png"  # Percorso dell'immagine della rete
+        self.load_image()
+
+        self.start_button = tk.Button(self.frame_top, text="START", bg="#007bff", fg="white", relief=tk.FLAT, command=self.on_start_button_clicked)
+        self.start_button.pack(fill=tk.X, pady=5)
+
+        self.stop_button = tk.Button(self.frame_top, text="STOP", bg="#007bff", fg="white", relief=tk.FLAT, command=self.on_stop_button_clicked)
+        self.stop_button.pack(fill=tk.X, pady=5)
+
+        self.frame_bottom = tk.Frame(self, bg="#f0f0f0")
+        self.frame_bottom.pack(fill=tk.BOTH, expand=True, padx=20, pady=(0, 10))
+
+        self.term_label1 = tk.Label(self.frame_bottom, text="Terminal 1", bg="#f0f0f0", fg="#333")
+        self.term_label1.grid(row=0, column=0, padx=(0, 10))
+
+        self.term_label2 = tk.Label(self.frame_bottom, text="Terminal 2", bg="#f0f0f0", fg="#333")
+        self.term_label2.grid(row=0, column=1, padx=(10, 0))
+
+        self.console1 = tk.Text(self.frame_bottom, bg="#333", fg="white", width=50, height=10)
+        self.console1.grid(row=1, column=0, padx=(0, 10), sticky="nsew")
+
+        self.console2 = tk.Text(self.frame_bottom, bg="#333", fg="white", width=50, height=10)
+        self.console2.grid(row=1, column=1, padx=(10, 0), sticky="nsew")
+
+        self.ping_button = tk.Button(self.frame_bottom, text="PING", bg="#007bff", fg="white", relief=tk.FLAT, command=self.ping)
+        self.ping_button.grid(row=2, column=1, pady=(10, 0))
+
+        self.threads = []
+        self.stop_event = threading.Event()
+
+    def load_image(self):
+        self.image = tk.PhotoImage(file=self.image_path)
+        self.img_label = tk.Label(self.frame_top, image=self.image, bg="#f0f0f0")
+        self.img_label.pack(side=tk.LEFT, padx=10)
+
+    def on_start_button_clicked(self):
+        
+        # Pulisce la topologia Mininet
+        self.clear_mininet_topology()
+
+        # Avvia il processo slicing_scenario.py
+        thread1 = threading.Thread(target=self.start_slicing_scenario)
+        self.threads.append(thread1)
+        thread1.start()
+
+        # Avvia il processo my_network.py
+        thread2 = threading.Thread(target=self.start_my_network)
+        self.threads.append(thread2)
+        thread2.start()
+
+    def clear_mininet_topology(self):
+        # Pulisce la topologia Mininet
+        subprocess.run(['bash', 'clear_mininet_topology.sh'])
+    
+    def on_stop_button_clicked(self):
+        # Imposta il flag per terminare i thread
+        self.stop_event.set()
+
+    def start_slicing_scenario(self):
+        process = subprocess.Popen(["sudo", "ryu-manager", "slicing_scenario.py"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        for line in process.stdout:
+            if self.stop_event.is_set():
+                process.terminate()
+                break
+            self.console1.insert(tk.END, line.decode('utf-8'))
+
+    def start_my_network(self):
+        process = subprocess.Popen(["sudo", "python3", "my_network.py"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
+        for line in process.stdout:
+            if self.stop_event.is_set():
+                process.terminate()
+                break
+            self.console2.insert(tk.END, line.decode('utf-8'))
+
+    def ping(self):
+        if self.threads:  # Verifica se il processo my_network.py è stato avviato
+            for thread in self.threads:
+                if "start_my_network" in str(thread):  # Trova il thread che avvia my_network.py
+                    my_network_thread = thread
+                    my_network_process = my_network_thread._target  # Ottieni il processo di my_network.py dal thread
+                    my_network_process.stdin.write(b"pingall\n")  # Invia il comando pingall al processo
+                    my_network_process.stdin.flush()
+
+                    # Leggi e stampa l'output del processo
+                    while True:
+                        output_line = my_network_process.stdout.readline().decode('utf-8')
+                        if not output_line:
+                            break
+                        self.console2.insert(tk.END, output_line)  # Stampa l'output nella console2
+                    break
+
+
+
+
+
+if __name__ == "__main__":
+    app = NetworkApp()
+    app.mainloop()
