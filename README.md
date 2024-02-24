@@ -3,15 +3,14 @@
 
 python3 -m pip install PyQt5 pyautogui pyte pexpect
 # Network Softwarization - Network Slicing - Mottola Gabriele #
-```text
+
 The network represents a hypothetical school lab network consisting of two labs, named lab1 and lab2, and an IT office. Each lab comprises three hosts representing students, and there are two servers. In the IT office, there is one admin station and one server.
-```
+
 ## Short Introduction ##
 
-![Alt Text](./network_image.png))
+![Alt Text](./network_image.png)
 
 ## Project Description: Emergency Network Slicing ##
-```text
 The text describes a hypothetical school lab network featuring two labs, lab1 and lab2, along with an IT office. Each lab is equipped with three hosts representing students, and there are two servers in total. Within the IT office, there is an admin station and a server.
 Three scenarios have been implemented: normal (all working), full (high request), and isolated (network issues).
 
@@ -27,7 +26,7 @@ This folder contains the following files:
 
 
 4. slicing_scenario.py: Application that utilizes the aforementioned scripts in an automatic manner, in order to dynamically implement the network slicing strategy. This is the original file minus the automatical change
-```
+
 ### How to Run ###
 You can simply run the emulation application with the following commands in this folder.
 
@@ -38,7 +37,7 @@ $ python3 program.py
 
 2. Starting the network using the button **START**
 ```text
-Now the console apear. The buttons for the states are enabled.
+Now the console appears. The buttons for the states are enabled.
 ```
 
 ## How to Verify ##
@@ -82,9 +81,26 @@ s1 -> X  h1 h2 h3 h4 h5 h6 X  X  X  X  X
 s2 -> X  h1 h2 h3 h4 h5 h6 X  X  X  X  X
 s3 -> X  h1 h2 h3 h4 h5 h6 X  X  X  X  X
 s4 -> X  h1 h2 h3 h4 h5 h6 X  X  X  X  X
-*** Results: X% dropped (56/132 received)
+*** Results: 62% dropped (50/132 received)
 ```
-
+*Case 3: Isolated Scenario* 
+```bash
+mininet> pingall
+*** Ping: testing ping reachability
+h0 -> X  X  X  X  X  X  X  s0 s1 s2 s3 s4
+h1 -> X  X  X  X  X  X  X  X  s1 s2 X  X
+h2 -> X  X  X  X  X  X  X  X  s1 s2 X  X
+h3 -> X  X  X  X  X  X  X  X  s1 s2 X  X 
+h4 -> X  X  X  X  X  X  X  X  X  X  s3 s4
+h5 -> X  X  X  X  X  X  X  X  X  X  s3 s4
+h6 -> X  X  X  X  X  X  X  X  X  X  s3 s4
+s0 -> h0 X  X  X  X  X  X  X  s1 s2 s3 s4
+s1 -> h0 h1 h2 h3 X  X  X  s0 X  X  X  X
+s2 -> h0 h1 h2 h3 X  X  X  s0 X  X  X  X
+s3 -> h0 X  X  X  h4 h5 h6 s0 X  X  X  X
+s4 -> h0 X  X  X  h4 h5 h6 s0 X  X  X  X
+*** Results: X% dropped (X/132 received)
+```
 
 2. client mode: verifying flows in each router and check the virtual queues/slices, e.g.:
 ```bash
@@ -95,7 +111,7 @@ mininet> sh ovs-ofctl dump-flows r1
 mininet> sh ovs-ofctl dump-flows r2
 ```
 
-3. iperf mode: verifying slices' bandwidth, e.g. (in both emergency/non-emergency situations):
+3. iperf mode: verifying slices' bandwidth:
 NOT IMPLEMETED YET
 
 *Case 1: Non-Emergency Scenario* 
