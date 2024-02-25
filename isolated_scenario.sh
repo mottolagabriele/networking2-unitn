@@ -59,15 +59,27 @@ sudo ovs-vsctl -- --all destroy QoS -- --all destroy Queue
 
 for device in "${devices[@]}"
 do
-    sudo ovs-vsctl set port $device qos=@newqos -- \
-    --id=@newqos create QoS type=linux-htb \
-    other-config:max-rate=10000000 \
+
+   sudo ovs-vsctl set port $device qos=@newqos -- \
+    --id=@newqos create QoS type=linux-htb-direct \
     queues:1=@1q \
     queues:2=@2q \
     queues:3=@3q -- \
-    --id=@1q create queue other-config:min-rate=1000000 other-config:max-rate=5000000 -- \
-    --id=@2q create queue other-config:min-rate=1000000 other-config:max-rate=5000000 -- \
-    --id=@3q create queue other-config:min-rate=1000000 other-config:max-rate=5000000
+    --id=@1q create queue other-config:max-rate=5000000 -- \
+    --id=@2q create queue other-config:max-rate=5000000 -- \
+    --id=@3q create queue other-config:max-rate=5000000
+
+
+
+    #sudo ovs-vsctl set port $device qos=@newqos -- \
+    #--id=@newqos create QoS type=linux-htb \
+    #other-config:max-rate=10000000 \
+    #queues:1=@1q \
+    #queues:2=@2q \
+    #queues:3=@3q -- \
+    #--id=@1q create queue other-config:min-rate=1000000 other-config:max-rate=5000000 -- \
+    #--id=@2q create queue other-config:min-rate=1000000 other-config:max-rate=5000000 -- \
+    #--id=@3q create queue other-config:min-rate=1000000 other-config:max-rate=5000000
 
     #for eth in eth1 eth2 eth3 eth4
     #do

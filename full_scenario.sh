@@ -46,44 +46,97 @@ ip_s4="10.0.0.12"
 vendor_id="00:00:00"
 
 
-devices=("sw0" "sw1" "sw2" "sw3" "sw4" "sw5" "sw6")
+#
+#devicess=("sw0-eth1" "sw0-eth2" "sw0-eth3" "sw0-eth4" 
+#         "sw1-eth1" "sw1-eth2" "sw1-eth3" "sw1-eth4" 
+#         "sw2-eth1" "sw2-eth2" "sw2-eth3" 
+#         "sw3-eth1" "sw3-eth2" "sw3-eth3" "sw3-eth4" 
+#         "sw4-eth1" "sw4-eth2" "sw4-eth3" 
+#         "sw5-eth1" "sw5-eth2" "sw5-eth3" "sw5-eth4" 
+#         "sw6-eth1" "sw6-eth2" "sw6-eth3")
+#
+#
+#for device in "${devices[@]}"
+#do
+#    sudo ovs-vsctl -- clear Port $device qos
+#    sudo ovs-vsctl -- clear Port $device qos
+#done
+#
+#sudo ovs-vsctl -- --all destroy QoS -- --all destroy Queue
+#
+## Definisci un array associativo per specificare il numero di porte per ciascuno switch
+#declare -A switch_ports=(
+#    [sw0]=4
+#    [sw1]=3
+#    [sw2]=3
+#    [sw3]=4
+#    [sw4]=3
+#    [sw5]=4
+#    [sw6]=3
+#)
+#
+#for switch in "${!switch_ports[@]}"
+#do
+#    num_ports=${switch_ports[$switch]}
+#    for ((i=1; i<=$num_ports; i++))
+#    do
+#        eth="eth$i"
+#        echo "Creating slices on ${switch}-${eth}..."
+#        if sudo ovs-vsctl list-ports "$switch" | grep -q "$eth"; then
+#            sudo ovs-vsctl set port ${switch}-${eth} qos=@${switch}-${eth}-qos -- \
+#            --id=@${switch}-${eth}-qos create QoS type=linux-htb \
+#            other-config:max-rate=10000000 \
+#            queues:1=@${switch}-${eth}-q1 \
+#            queues:2=@${switch}-${eth}-q2 -- \
+#            --id=@${switch}-${eth}-q1 create queue other-config:min-rate=1000000 other-config:max-rate=5000000 -- \
+#            --id=@${switch}-${eth}-q2 create queue other-config:min-rate=1000000 other-config:max-rate=5000000
+#        else
+#            echo "Port ${eth} non trovata su ${switch}."
+#        fi
+#    done
+#done
+#
+#
+#
+##for device in "${devices[@]}"
+##do
+##
+##    #sudo ovs-vsctl set port $device qos=@newqos -- \
+##    #--id=@newqos create QoS type=linux-htb \
+##    #other-config:max-rate=10000000 \
+##    #queues:1=@1q \
+##    #queues:2=@2q -- \
+##    #--id=@1q create queue other-config:min-rate=1000000 other-config:max-rate=5000000 -- \
+##    #--id=@2q create queue other-config:min-rate=1000000 other-config:max-rate=5000000
+##    for eth in eth1 eth2 eth3 eth4
+##    do
+##        echo "Creating slices on ${device}-${eth}..."
+##        sudo ovs-vsctl set port ${device}-${eth} qos=@${device}-${eth}-qos -- \
+##        --id=@${device}-${eth}-qos create QoS type=linux-htb \
+##        other-config:max-rate=10000000 \
+##        queues:1=@${device}-${eth}-q1 \
+##        queues:2=@${device}-${eth}-q2 -- \
+##        --id=@${device}-${eth}-q1 create queue other-config:min-rate=1000000 other-config:max-rate=5000000 -- \
+##        --id=@${device}-${eth}-q2 create queue other-config:min-rate=1000000 other-config:max-rate=5000000
+##    done
+##done
 
-for device in "${devices[@]}"
-do
-    sudo ovs-vsctl -- clear Port $device qos
-    sudo ovs-vsctl -- clear Port $device qos
-done
+# Definisci i valori max-rate desiderati per le code
+max_rate1=5000000
+max_rate2=5000000
+max_rate3=3000000
 
-sudo ovs-vsctl -- --all destroy QoS -- --all destroy Queue
-
-
-for device in "${devices[@]}"
-do
-    sudo ovs-vsctl set port $device qos=@newqos -- \
-    --id=@newqos create QoS type=linux-htb \
-    other-config:max-rate=10000000 \
-    queues:1=@1q \
-    queues:2=@2q -- \
-    --id=@1q create queue other-config:min-rate=1000000 other-config:max-rate=5000000 -- \
-    --id=@2q create queue other-config:min-rate=1000000 other-config:max-rate=5000000
-    #for eth in eth1 eth2 eth3 eth4
-    #do
-    #    echo "Creating slices on ${device}-${eth}..."
-    #    sudo ovs-vsctl set port ${device}-${eth} qos=@${device}-${eth}-qos -- \
-    #    --id=@${device}-${eth}-qos create QoS type=linux-htb \
-    #    other-config:max-rate=10000000 \
-    #    queues:1=@${device}-${eth}-q1 \
-    #    queues:2=@${device}-${eth}-q2 -- \
-    #    --id=@${device}-${eth}-q1 create queue other-config:min-rate=1000000 other-config:max-rate=5000000 -- \
-    #    --id=@${device}-${eth}-q2 create queue other-config:min-rate=1000000 other-config:max-rate=5000000
-    #done
-done
+# Esegui lo script di configurazione delle code fornendo i valori max-rate come parametri
+./set_slices.sh "$max_rate1" "$max_rate2" "$max_rate3"
 
 
-echo 'Created 2 slice creation of 50Mbit/s.'
+echo 'End of slice creation [3].'
 
 
 mask=24
+devices=("sw0" "sw1" "sw2" "sw3" "sw4" "sw5" "sw6")
+
+
 # Regole per la prima slice (h1,h2,h3,h4,h5,h6 <-> s1,s3)
 for device in "${devices[@]}"
 do
@@ -165,9 +218,9 @@ do
     sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_s2,nw_dst=$ip_s0,idle_timeout=0,actions=drop
     sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_s2,nw_dst=$ip_s4,idle_timeout=0,actions=drop
 
-    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_s4,nw_dst=$ip_h0,idle_timeout=0,actions=drop
-    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_s4,nw_dst=$ip_s0,idle_timeout=0,actions=drop
-    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_s4,nw_dst=$ip_s2,idle_timeout=0,actions=drop
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_s4,nw_dst=$ip_h0,idle_timeout=0,actions=set_queue:2,normal
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_s4,nw_dst=$ip_s0,idle_timeout=0,actions=set_queue:2,normal
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_s4,nw_dst=$ip_s2,idle_timeout=0,actions=set_queue:2,normal
 
 
     # Assicurati che altri flussi non specificati siano lasciati cadere
