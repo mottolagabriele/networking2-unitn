@@ -1,6 +1,5 @@
 # README
 
-
 python3 -m pip install PyQt5 pyautogui pyte pexpect
 # Network Softwarization - Network Slicing - Mottola Gabriele #
 
@@ -12,7 +11,7 @@ The network represents a hypothetical school lab network consisting of two labs,
 
 ## Project Description: Emergency Network Slicing ##
 The text describes a hypothetical school lab network featuring two labs, lab1 and lab2, along with an IT office. Each lab is equipped with three hosts representing students, and there are two servers in total. Within the IT office, there is an admin station and a server.
-Three scenarios have been implemented: normal (all working), full (high request), and isolated (network issues).
+Four scenarios have been implemented: normal (all working), full (high request), and isolated (network issues), service.
 
 
 This folder contains the following files:
@@ -38,7 +37,7 @@ This folder contains the following files:
 ### How to Run ###
 You can simply run the emulation application with the following commands in this folder.
 
-1. Start the program that automatically anable the manager, start the network:
+1. Start the program that automatically enable the manager, start the network:
 ```bash
 $ python3 program.py
 ```
@@ -51,7 +50,7 @@ Now the console appears. The buttons for the states are enabled.
 ## How to Verify ##
 
 
-1. ping mode: verifying connecitvity, e.g.:
+1. ping mode: verifying connectivity:
 *Case 1: Normale state* 
 ```bash
 mininet> pingall
@@ -109,7 +108,7 @@ s4 -> h0 X  X  X  h4 h5 h6 s0 X  X  X  X
 *** Results: 68% dropped (42/132 received)
 ```
 
-2. client mode: verifying flows in each router and check the virtual queues/slices, e.g.:
+2. client mode: verifying flows in each switch and check the virtual queues/slices:
 ```bash
 mininet> sh ovs-ofctl dump-flows sw0
 ```
@@ -174,7 +173,7 @@ We have some parameters:
 -i interval of the mesuring
 ```
 *Service scenario*
-Start listening on the s1 as server on port 6881 and use h1 as client:
+Starts listening on s1 as the server on port 6881 and uses h1 as the client
 Note: If we don't enforce the bandwidth limit, the result is 1.05. The purpose of the test is to enforce a bandwidth higher than the limit, such as 10, and observe that it decreases to around 5 (the limit we have set).
 
 Torrent test
@@ -198,7 +197,7 @@ mininet> h4 iperf -c s3 -b 2.5MB -t 10 -i 1
 
 
 ## Implementation Details ##
-The network represents a hypothetical school lab network consisting of two labs, named lab1 and lab2, and an IT office. Each lab comprises three hosts representing students, and there are two servers. In the IT office, there is one admin station and one server.
+The network represents a hypothetical school lab network consisting of two labs, named Lab1 and Lab2, and an IT office. Each lab comprises three hosts representing students, and there are two servers. In the IT office, there is one admin station and one server.
 
 In the normal state, students cannot communicate with each other across labs but can access services within their own lab. Each lab has a dedicated server (S1 for lab1 and S3 for lab2). Additionally, the IT office can access servers S2 and S4, which serve as backup servers.
 
@@ -206,6 +205,7 @@ During peak times, known as the full state, servers S2 and S4 are available to h
 
 In the isolated state, assumed during network issues, basic functionality is preserved. Lab1 students can only access servers S1 and S2, while lab2 students can only access servers S3 and S4. The IT office retains access to all servers for verification purposes.
 
+In the service state, we aim to control traffic using common protocols and ports. We choose to limit Torrent traffic, streaming traffic, and ensure high throughput for VoIP.
 
 Note: When using a terminal opened with Python, you may encounter some issues after pressing Control-C. This problem is caused by the terminal and the operating system implementation. An important future implementation should address this issue. The easiest solution is to retype Control-C. There are no ideas why this works.
 
