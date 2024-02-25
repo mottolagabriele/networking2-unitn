@@ -8,7 +8,7 @@ The network represents a hypothetical school lab network consisting of two labs,
 
 ## Short Introduction ##
 
-![Alt Text](./network_image.png)
+![Alt Text](./images/network_image.png)
 
 ## Project Description: Emergency Network Slicing ##
 The text describes a hypothetical school lab network featuring two labs, lab1 and lab2, along with an IT office. Each lab is equipped with three hosts representing students, and there are two servers in total. Within the IT office, there is an admin station and a server.
@@ -18,14 +18,22 @@ Three scenarios have been implemented: normal (all working), full (high request)
 This folder contains the following files:
 1. my_network.py: Python script to build a network with seven hosts, five sercers, six switchs and the respective links.
 
-2. normal_scenario.sh: Bash script that automatically build two virtual queues ....
+2. set_slices.sh: Bash script that automatically create the slides.
 
-3. full_scenario.sh: Bash script that automatically build two virtual queues ....
+3. normal_scenario.sh: Bash script that automatically build two virtual queues (50 Mbit/s for labs, 100 Mbit/s for IT OFFICE).
 
-4. isolated_scenario.sh: Bash script that automatically build three virtual queues ....
+4. full_scenario.sh: Bash script that automatically build two virtual queues (75 Mbit/s for labs, 100 Mbit/s for IT OFFICE).
 
+5. isolated_scenario.sh: Bash script that automatically build three virtual queues  (50 Mbit/s for each labs, 100 Mbit/s for IT OFFICE).
 
-4. slicing_scenario.py: Application that utilizes the aforementioned scripts in an automatic manner, in order to dynamically implement the network slicing strategy. This is the original file minus the automatical change
+6. service_scenario.sh: Bash script that automatically buil (5 Mbit/s for Torrent, 15 Mbit/s for streaming, 30 Mbit/s for VoIP ).
+
+7. slicing_scenario.py: Application that utilizes the aforementioned scripts in an automatic manner, in order to dynamically implement the network slicing strategy. This is the original file minus the automatic mode change.
+
+8. program.py: Python script that run the gui and call the files.
+
+9. NetworkDrawer: Python script that allow creating the network image, allows to set host/server/switch, set connection, change color connection
+
 
 ### How to Run ###
 You can simply run the emulation application with the following commands in this folder.
@@ -63,7 +71,6 @@ s4 -> h0 X  X  X  X  X  X  s0 X  s2 X  X
 
 *** Results: 74% dropped (34/132 received)
 ```
-
 
 *Case 2: Full Scenario* 
 ```bash
@@ -154,25 +161,41 @@ mininet> iperf s0 s2
 
 
 
-4. iperf mode: verifying slices' bandwidth, e.g. (in both emergency/non-emergency situations):
+4. iperf mode: verifying slices' bandwidth:
 
-Start listening on the h4 as server and use h1 as client:
+We have some parameters:
 ```bash
-mininet> s1 iperf -s -b 2.5M &
-mininet> h1 iperf -c h4 -b 2.5MB -t 10 -i 1
+-s server mode
+-c client
+-u use udp instead of tcp
+-p select the port
+-b bandwidth
+-t seconds of the test
+-i interval of the mesuring
+```
+*Service scenario*
+Start listening on the s1 as server on port 6881 and use h1 as client:
+Note: If we don't enforce the bandwidth limit, the result is 1.05. The purpose of the test is to enforce a bandwidth higher than the limit, such as 10, and observe that it decreases to around 5 (the limit we have set).
+
+Torrent test
+```bash
+mininet> s1 iperf -s -p 6881 &
+mininet> h1 iperf -c s1  -p 6881 -t 5 -i 1 -b
 ```
 
-Start listening on the h5 as server and use h2 as client:
+VoIP test
 ```bash
-mininet> s3 iperf -s -b 2.5M &
-mininet> h4 iperf -c h5 -b 2.5M -t 10 -i 1
+mininet> s2 iperf -s -u -p 5060 &
+mininet> h1 iperf -c s1 -u -p 5060 -t 5 -i 1 -b
+```
+*Normal, full and isolated scenario*
+
+Start listening on the s3 as server and use h4 as client:
+```bash
+mininet> s3 iperf -s
+mininet> h4 iperf -c s3 -b 2.5MB -t 10 -i 1
 ```
 
-Start listening on the h6 as server and use h3 as client:
-```bash
-mininet> s0 iperf -s -b 3.5M &
-mininet> s2 iperf -c h6 -b 3.5M -t 10 -i 1
-```
 
 ## Implementation Details ##
 The network represents a hypothetical school lab network consisting of two labs, named lab1 and lab2, and an IT office. Each lab comprises three hosts representing students, and there are two servers. In the IT office, there is one admin station and one server.

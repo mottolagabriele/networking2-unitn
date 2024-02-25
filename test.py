@@ -25,9 +25,6 @@ class NetworkApp(tk.Tk):
         self.stop_button = tk.Button(self.frame_top, text="STOP", bg="#007bff", fg="white", relief=tk.FLAT, command=self.on_stop_button_clicked, state=tk.DISABLED)
         self.stop_button.pack(fill=tk.X, pady=5)
         
-        self.open_cli = tk.Button(self.frame_top, text="APRI CLI", bg="#007bff", fg="white", relief=tk.FLAT, command=self.apri_cli_mininet, state=tk.DISABLED)
-        self.open_cli.pack(fill=tk.X, pady=5)
-
         self.normal_state_button = tk.Button(self.frame_top, text="NORMAL STATE", bg="#007bff", fg="white", relief=tk.FLAT, command=self.on_normal_state_button_clicked, state=tk.DISABLED)
         self.normal_state_button.pack(fill=tk.X, pady=5)
 
@@ -36,6 +33,9 @@ class NetworkApp(tk.Tk):
         
         self.isolated_state_button = tk.Button(self.frame_top, text="ISOLATED STATE", bg="#007bff", fg="white", relief=tk.FLAT, command=self.on_isolated_state_button_clicked, state=tk.DISABLED)
         self.isolated_state_button.pack(fill=tk.X, pady=5)
+        
+        self.service_state_button = tk.Button(self.frame_top, text="SERVICE STATE", bg="#007bff", fg="white", relief=tk.FLAT, command=self.on_service_state_button_clicked, state=tk.DISABLED)
+        self.service_state_button.pack(fill=tk.X, pady=5)
 
         self.stop_event = threading.Event()
 
@@ -58,7 +58,7 @@ class NetworkApp(tk.Tk):
         # Disabilita il pulsante START e abilita gli altri
         self.start_button.config(state=tk.DISABLED)
         self.stop_button.config(state=tk.NORMAL)
-        self.open_cli.config(state=tk.NORMAL)
+        self.service_state_button.config(state=tk.NORMAL)
         self.normal_state_button.config(state=tk.NORMAL)
         self.full_state_button.config(state=tk.NORMAL)
         self.isolated_state_button.config(state=tk.NORMAL)
@@ -126,17 +126,20 @@ class NetworkApp(tk.Tk):
         self.display_output(output.decode("utf-8"))
         self.display_output("Started Isolated State Scenario\n")
         self.network_drawer.isolated_state()
+    
+    def on_service_state_button_clicked(self):
+        # Avvia lo scenario isolato
+        process = subprocess.Popen(['bash', 'service_scenario.sh'], stdout=subprocess.PIPE)
+        output, _ = process.communicate()
+        self.display_output(output.decode("utf-8"))
+        self.display_output("Started Service State Scenario\n")
+        self.network_drawer.normale_state()
 
     def display_output(self, text):
         self.terminal_output.insert(tk.END, text)
         self.terminal_output.see(tk.END)
 
-    def apri_cli_mininet(self):
-        #command = "ls"  # Comando da eseguire nel terminale all'avvio
-        command = "mn --controller=remote,ip=127.0.0.1,port=6653"  # Comando da eseguire nel terminale all'avvio
-
-        # Avvia xterm come processo esterno e passa il comando
-        subprocess.Popen(["xterm", "-hold", "-e", "bash", "-c", f"{command}; exec bash"])
+   
 
 if __name__ == "__main__":
     app = NetworkApp()

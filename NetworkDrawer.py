@@ -23,9 +23,9 @@ class NetworkDrawer:
 
     def load_images(self):
         # Caricamento delle immagini
-        self.images['switch'] = tk.PhotoImage(file="switch.png").subsample(12)
-        self.images['host'] = tk.PhotoImage(file="host.png").subsample(12)
-        self.images['server'] = tk.PhotoImage(file="server.png").subsample(12)
+        self.images['switch'] = tk.PhotoImage(file="./images/switch.png").subsample(12)
+        self.images['host'] = tk.PhotoImage(file="./images/host.png").subsample(12)
+        self.images['server'] = tk.PhotoImage(file="./images/server.png").subsample(12)
 
     def draw_node(self, x, y, picture):
         self.canvas.create_image(x, y, anchor=tk.NW, image=self.images[picture.img_path])
