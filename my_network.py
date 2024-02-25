@@ -13,7 +13,7 @@ class NetworkSlicingTopo(Topo):
 
         # Create template host, switch, and link
         host_config = dict(inNamespace=True)
-        link_config = dict(bw=10)  # Total Capacity of the link ~ 10Mbps
+        link_config = dict(bw=100)  # Total Capacity of the link ~ 10Mbps
         host_link_config = dict()
 
         # Definizione dei prefissi MAC

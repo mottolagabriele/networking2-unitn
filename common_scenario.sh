@@ -46,55 +46,16 @@ ip_s4="10.0.0.12"
 vendor_id="00:00:00"
 
 
-#devices=("sw0" "sw1" "sw2" "sw3" "sw4" "sw5" "sw6")
-#
-#for device in "${devices[@]}"
-#do
-#    sudo ovs-vsctl -- clear Port $device qos
-#    sudo ovs-vsctl -- clear Port $device qos
-#done
-#
-#sudo ovs-vsctl -- --all destroy QoS -- --all destroy Queue
-#
-#
-#for device in "${devices[@]}"
-#do
-#    sudo ovs-vsctl set port $device qos=@newqos -- \
-#    --id=@newqos create QoS type=linux-htb \
-#    other-config:max-rate=10000000 \
-#    queues:1=@1q \
-#    queues:2=@2q -- \
-#    --id=@1q create queue other-config:min-rate=1000000 other-config:max-rate=5000000 -- \
-#    --id=@2q create queue other-config:min-rate=1000000 other-config:max-rate=5000000
-#    #for eth in eth1 eth2 eth3 eth4
-#    #do
-#    #    echo "Creating slices on ${device}-${eth}..."
-#    #    sudo ovs-vsctl set port ${device}-${eth} qos=@${device}-${eth}-qos -- \
-#    #    --id=@${device}-${eth}-qos create QoS type=linux-htb \
-#    #    other-config:max-rate=10000000 \
-#    #    queues:1=@${device}-${eth}-q1 \
-#    #    queues:2=@${device}-${eth}-q2 -- \
-#    #    --id=@${device}-${eth}-q1 create queue other-config:min-rate=1000000 other-config:max-rate=5000000 -- \
-#    #    --id=@${device}-${eth}-q2 create queue other-config:min-rate=1000000 other-config:max-rate=5000000
-#    #done
-#done
-#
-#
-#echo 'End of slice creation [3].'
-#
-#
-#mask=24
-
 # Definisci i valori max-rate desiderati per le code
-max_rate1=5000000
-max_rate2=5000000
-max_rate3=3000000
+max_rate1=50000000
+max_rate2=100000000
+max_rate3=0
 
 # Esegui lo script di configurazione delle code fornendo i valori max-rate come parametri
 ./set_slices.sh "$max_rate1" "$max_rate2" "$max_rate3"
 
 
-echo 'End of slice creation [3].'
+
 
 
 mask=24
@@ -158,4 +119,5 @@ do
     # Assicurati che altri flussi non specificati siano lasciati cadere
     sudo ovs-ofctl add-flow $device priority=1,actions=drop
 done
-   
+
+echo '[NORMAL STATE] - Create 1 slice of 50Mbit/s (LABS) and 1 of 100Mbit/s (IT OFFICE).'

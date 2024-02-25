@@ -117,40 +117,61 @@ mininet> sh ovs-vsctl list queue
 ```
 
 3. iperf mode: verifying slices' bandwidth:
-NOT YET
-*Case 1: Non-Emergency Scenario* 
+*Case 1: Normal Scenario* 
 ```bash
-mininet> iperf h1 h4
+mininet> iperf h1 s1
 *** Iperf: testing TCP bandwidth between h1 and h4 
-*** Results: ['80.7 Mbits/sec', '81.7 Mbits/sec']
-mininet> iperf h2 h5
+*** Results: ['42.6 Mbits/sec', '43.1 Mbits/sec']
+mininet> iperf s2 s0
 *** Iperf: testing TCP bandwidth between h2 and h5 
-*** Results: ['4.78 Mbits/sec', '5.28 Mbits/sec']
-mininet> iperf h3 h6
-*** Iperf: testing TCP bandwidth between h3 and h6 
-(No Answer - Ctrl+C to exit)
+*** Results: ['79.2 Mbits/sec', '80.8 Mbits/sec']
+```
+*Case 2: Full Scenario* 
+```bash
+mininet> iperf h1 s1
+*** Iperf: testing TCP bandwidth between h1 and h4 
+*** Results: ['60.4 Mbits/sec', '63.1 Mbits/sec']
+mininet> iperf h0 s0
+*** Iperf: testing TCP bandwidth between h2 and h5 
+*** Results: ['78.5 Mbits/sec', '79.3 Mbits/sec']
+```
+
+*Case 3: Isolated Scenario* 
+```bash
+mininet> iperf h1 s1
+*** Iperf: testing TCP bandwidth between h1 and h4 
+*** Results: ['18.7 Mbits/sec', '19.6 Mbits/sec']
+mininet> iperf h4 s3
+*** Iperf: testing TCP bandwidth between h1 and h4 
+*** Results: ['18.6 Mbits/sec', '19.7 Mbits/sec']
+mininet> iperf h0 s0
+*** Iperf: testing TCP bandwidth between h2 and h5 
+*** Results: ['80.5 Mbits/sec', '81.8 Mbits/sec']
+mininet> iperf s0 s2
+*** Iperf: testing TCP bandwidth between h2 and h5 
+*** Results: ['75.9 Mbits/sec', '77.4 Mbits/sec']
 ```
 
 
 
 4. iperf mode: verifying slices' bandwidth, e.g. (in both emergency/non-emergency situations):
-NOT IMPLEMETED YET
+
 Start listening on the h4 as server and use h1 as client:
 ```bash
-mininet> h4 iperf -s -b 2.5M &
+mininet> s1 iperf -s -b 2.5M &
 mininet> h1 iperf -c h4 -b 2.5MB -t 10 -i 1
 ```
 
 Start listening on the h5 as server and use h2 as client:
 ```bash
-mininet> h5 iperf -s -b 2.5M &
-mininet> h2 iperf -c h5 -b 2.5M -t 10 -i 1
+mininet> s3 iperf -s -b 2.5M &
+mininet> h4 iperf -c h5 -b 2.5M -t 10 -i 1
 ```
 
 Start listening on the h6 as server and use h3 as client:
 ```bash
-mininet> h6 iperf -s -b 3.5M &
-mininet> h3 iperf -c h6 -b 3.5M -t 10 -i 1
+mininet> s0 iperf -s -b 3.5M &
+mininet> s2 iperf -c h6 -b 3.5M -t 10 -i 1
 ```
 
 ## Implementation Details ##

@@ -37,6 +37,7 @@ done
 # Cancella tutte le code esistenti
 sudo ovs-vsctl -- --all destroy QoS -- --all destroy Queue
 
+echo "sl1 ${max_rate1} - sl2 ${max_rate2} - sl3 ${max_rate3}"
 
 for switch in "${!switch_ports[@]}"
 do
@@ -47,11 +48,11 @@ do
         echo "Creating slices on ${switch}-${eth}..."
         qos_command="sudo ovs-vsctl set port ${switch}-${eth} qos=@${switch}-${eth}-qos -- \
         -- --id=@${switch}-${eth}-qos create QoS type=linux-htb \
-        other-config:max-rate=10000000 \
+        other-config:max-rate=100000000 \
         queues:1=@${switch}-${eth}-q1 \
         queues:2=@${switch}-${eth}-q2 \
         queues:3=@${switch}-${eth}-q3 -- \
-        -- --id=@${switch}-${eth}-q1 create queue other-config:min-rate=1000000 other-config:max-rate=${max_rate1} -- \
+        --id=@${switch}-${eth}-q1 create queue other-config:min-rate=1000000 other-config:max-rate=${max_rate1} -- \
         --id=@${switch}-${eth}-q2 create queue other-config:min-rate=1000000 other-config:max-rate=${max_rate2} -- \
         --id=@${switch}-${eth}-q3 create queue other-config:min-rate=1000000 other-config:max-rate=${max_rate3}"
 
