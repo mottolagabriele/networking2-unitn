@@ -133,7 +133,7 @@ class NetworkApp(tk.Tk):
         output, _ = process.communicate()
         self.display_output(output.decode("utf-8"))
         self.display_output("Started Service State Scenario\n")
-        self.network_drawer.normale_state()
+        self.network_drawer.clear_state()
 
     def display_output(self, text):
         self.terminal_output.insert(tk.END, text)

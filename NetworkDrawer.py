@@ -127,6 +127,26 @@ class NetworkDrawer:
         for element in self.canvas.find_all():
             self.canvas.move(element, dx, dy)
 
+    def clear_state(self):
+        self.canvas.itemconfig(self.connections['sw4_s1_d'], fill='')
+        self.canvas.itemconfig(self.connections['sw4_s2_d'], fill='')
+        self.canvas.itemconfig(self.connections['sw6_s3_d'], fill='')
+        self.canvas.itemconfig(self.connections['sw6_s4_d'], fill='')
+
+        self.canvas.itemconfig(self.connections['sw3_h1'], fill='black')
+        self.canvas.itemconfig(self.connections['sw3_h2'], fill='black')
+        self.canvas.itemconfig(self.connections['sw3_h3'], fill='black')
+        self.canvas.itemconfig(self.connections['sw5_h4'], fill='black')
+        self.canvas.itemconfig(self.connections['sw5_h5'], fill='black')
+        self.canvas.itemconfig(self.connections['sw5_h6'], fill='black')
+        self.canvas.itemconfig(self.connections['sw4_s1'], fill='black')
+        self.canvas.itemconfig(self.connections['sw6_s3'], fill='black')
+
+        self.canvas.itemconfig(self.connections['sw0_h0'], fill='black')
+        self.canvas.itemconfig(self.connections['sw0_s0'], fill='black')
+        self.canvas.itemconfig(self.connections['sw4_s2'], fill='black')
+        self.canvas.itemconfig(self.connections['sw6_s4'], fill='black')
+        
     def normale_state(self):
         self.canvas.itemconfig(self.connections['sw4_s1_d'], fill='')
         self.canvas.itemconfig(self.connections['sw4_s2_d'], fill='')
