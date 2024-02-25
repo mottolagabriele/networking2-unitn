@@ -46,59 +46,76 @@ ip_s4="10.0.0.12"
 vendor_id="00:00:00"
 
 
-devices=("sw0" "sw1" "sw2" "sw3" "sw4" "sw5" "sw6")
+#devices=("sw0" "sw1" "sw2" "sw3" "sw4" "sw5" "sw6")
+#
+#for device in "${devices[@]}"
+#do
+#    sudo ovs-vsctl -- clear Port $device qos
+#    sudo ovs-vsctl -- clear Port $device qos
+#done
+#
+#sudo ovs-vsctl -- --all destroy QoS -- --all destroy Queue
+#
+#
+#for device in "${devices[@]}"
+#do
+#
+#   sudo ovs-vsctl set port $device qos=@newqos -- \
+#    --id=@newqos create QoS type=linux-htb-direct \
+#    queues:1=@1q \
+#    queues:2=@2q \
+#    queues:3=@3q -- \
+#    --id=@1q create queue other-config:max-rate=5000000 -- \
+#    --id=@2q create queue other-config:max-rate=5000000 -- \
+#    --id=@3q create queue other-config:max-rate=5000000
+#
+#
+#
+#    #sudo ovs-vsctl set port $device qos=@newqos -- \
+#    #--id=@newqos create QoS type=linux-htb \
+#    #other-config:max-rate=10000000 \
+#    #queues:1=@1q \
+#    #queues:2=@2q \
+#    #queues:3=@3q -- \
+#    #--id=@1q create queue other-config:min-rate=1000000 other-config:max-rate=5000000 -- \
+#    #--id=@2q create queue other-config:min-rate=1000000 other-config:max-rate=5000000 -- \
+#    #--id=@3q create queue other-config:min-rate=1000000 other-config:max-rate=5000000
+#
+#    #for eth in eth1 eth2 eth3 eth4
+#    #do
+#    #    echo "Creating slices on ${device}-${eth}..."
+#    #    sudo ovs-vsctl set port ${device}-${eth} qos=@${device}-${eth}-qos -- \
+#    #    --id=@${device}-${eth}-qos create QoS type=linux-htb \
+#    #    other-config:max-rate=10000000 \
+#    #    queues:1=@${device}-${eth}-q1 \
+#    #    queues:2=@${device}-${eth}-q2 -- \
+#    #    --id=@${device}-${eth}-q1 create queue other-config:min-rate=1000000 other-config:max-rate=5000000 -- \
+#    #    --id=@${device}-${eth}-q2 create queue other-config:min-rate=1000000 other-config:max-rate=5000000
+#    #done
+#done
+#
+#
+#echo 'End of slice creation [3].'
+#
+#
+#mask=24
 
-for device in "${devices[@]}"
-do
-    sudo ovs-vsctl -- clear Port $device qos
-    sudo ovs-vsctl -- clear Port $device qos
-done
+# Definisci i valori max-rate desiderati per le code
+max_rate1=5000000
+max_rate2=5000000
+max_rate3=3000000
 
-sudo ovs-vsctl -- --all destroy QoS -- --all destroy Queue
-
-
-for device in "${devices[@]}"
-do
-
-   sudo ovs-vsctl set port $device qos=@newqos -- \
-    --id=@newqos create QoS type=linux-htb-direct \
-    queues:1=@1q \
-    queues:2=@2q \
-    queues:3=@3q -- \
-    --id=@1q create queue other-config:max-rate=5000000 -- \
-    --id=@2q create queue other-config:max-rate=5000000 -- \
-    --id=@3q create queue other-config:max-rate=5000000
-
-
-
-    #sudo ovs-vsctl set port $device qos=@newqos -- \
-    #--id=@newqos create QoS type=linux-htb \
-    #other-config:max-rate=10000000 \
-    #queues:1=@1q \
-    #queues:2=@2q \
-    #queues:3=@3q -- \
-    #--id=@1q create queue other-config:min-rate=1000000 other-config:max-rate=5000000 -- \
-    #--id=@2q create queue other-config:min-rate=1000000 other-config:max-rate=5000000 -- \
-    #--id=@3q create queue other-config:min-rate=1000000 other-config:max-rate=5000000
-
-    #for eth in eth1 eth2 eth3 eth4
-    #do
-    #    echo "Creating slices on ${device}-${eth}..."
-    #    sudo ovs-vsctl set port ${device}-${eth} qos=@${device}-${eth}-qos -- \
-    #    --id=@${device}-${eth}-qos create QoS type=linux-htb \
-    #    other-config:max-rate=10000000 \
-    #    queues:1=@${device}-${eth}-q1 \
-    #    queues:2=@${device}-${eth}-q2 -- \
-    #    --id=@${device}-${eth}-q1 create queue other-config:min-rate=1000000 other-config:max-rate=5000000 -- \
-    #    --id=@${device}-${eth}-q2 create queue other-config:min-rate=1000000 other-config:max-rate=5000000
-    #done
-done
+# Esegui lo script di configurazione delle code fornendo i valori max-rate come parametri
+./set_slices.sh "$max_rate1" "$max_rate2" "$max_rate3"
 
 
 echo 'End of slice creation [3].'
 
 
 mask=24
+devices=("sw0" "sw1" "sw2" "sw3" "sw4" "sw5" "sw6")
+
+
 # Regole per la prima slice (h1,h2,h3,h4,h5,h6 <-> s1,s3)
 for device in "${devices[@]}"
 do

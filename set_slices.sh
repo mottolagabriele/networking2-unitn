@@ -17,10 +17,22 @@ max_rate2=$2
 max_rate3=$3
 
 # Cancella tutte le code esistenti per i dispositivi
-for device in "${!switch_ports[@]}"
+# Cancella tutte le code esistenti per ciascuna porta di ciascun dispositivo
+for switch in "${!switch_ports[@]}"
 do
-    sudo ovs-vsctl -- clear Port $device qos
+    num_ports=${switch_ports[$switch]}
+    for ((i=1; i<=$num_ports; i++))
+    do
+        port="eth$i"
+        sudo ovs-vsctl -- clear Port ${switch}-${port} qos
+    done
 done
+
+
+#for device in "${!switch_ports[@]}"
+#do
+#    sudo ovs-vsctl -- clear Port $device qos
+#done
 
 # Cancella tutte le code esistenti
 sudo ovs-vsctl -- --all destroy QoS -- --all destroy Queue
