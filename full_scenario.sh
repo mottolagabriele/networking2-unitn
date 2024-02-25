@@ -80,7 +80,7 @@ do
 done
 
 
-echo 'End of slice creation [3].'
+echo 'Created 2 slice creation of 50Mbit/s.'
 
 
 mask=24

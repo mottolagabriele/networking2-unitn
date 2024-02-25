@@ -97,37 +97,69 @@ do
     sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_h2,nw_dst=$ip_s1,idle_timeout=0,actions=set_queue:1,normal
     sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_h3,nw_dst=$ip_s1,idle_timeout=0,actions=set_queue:1,normal
 
-    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_h4,nw_dst=$ip_s1,idle_timeout=0,actions=drop
-    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_h5,nw_dst=$ip_s1,idle_timeout=0,actions=drop
-    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_h6,nw_dst=$ip_s1,idle_timeout=0,actions=drop
-
-
     sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_s1,nw_dst=$ip_h1,idle_timeout=0,actions=set_queue:1,normal
     sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_s1,nw_dst=$ip_h2,idle_timeout=0,actions=set_queue:1,normal
     sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_s1,nw_dst=$ip_h3,idle_timeout=0,actions=set_queue:1,normal
+
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_h1,nw_dst=$ip_s2,idle_timeout=0,actions=set_queue:1,normal
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_h2,nw_dst=$ip_s2,idle_timeout=0,actions=set_queue:1,normal
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_h3,nw_dst=$ip_s2,idle_timeout=0,actions=set_queue:1,normal
+
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_s2,nw_dst=$ip_h1,idle_timeout=0,actions=set_queue:1,normal
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_s2,nw_dst=$ip_h2,idle_timeout=0,actions=set_queue:1,normal
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_s2,nw_dst=$ip_h3,idle_timeout=0,actions=set_queue:1,normal
+
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_h4,nw_dst=$ip_s1,idle_timeout=0,actions=drop
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_h5,nw_dst=$ip_s1,idle_timeout=0,actions=drop
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_h6,nw_dst=$ip_s1,idle_timeout=0,actions=drop
 
     sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_s1,nw_dst=$ip_h4,idle_timeout=0,actions=drop
     sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_s1,nw_dst=$ip_h5,idle_timeout=0,actions=drop
     sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_s1,nw_dst=$ip_h6,idle_timeout=0,actions=drop
 
-    # Prima slice (s3 può essere contattato da h4,h5,h6)
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_h4,nw_dst=$ip_s2,idle_timeout=0,actions=drop
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_h5,nw_dst=$ip_s2,idle_timeout=0,actions=drop
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_h6,nw_dst=$ip_s2,idle_timeout=0,actions=drop
 
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_s2,nw_dst=$ip_h4,idle_timeout=0,actions=drop
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_s2,nw_dst=$ip_h5,idle_timeout=0,actions=drop
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_s2,nw_dst=$ip_h6,idle_timeout=0,actions=drop
+
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_h1,nw_dst=$ip_s3,idle_timeout=0,actions=drop
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_h2,nw_dst=$ip_s3,idle_timeout=0,actions=drop
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_h3,nw_dst=$ip_s3,idle_timeout=0,actions=drop
+    
     sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_s3,nw_dst=$ip_h1,idle_timeout=0,actions=drop
     sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_s3,nw_dst=$ip_h2,idle_timeout=0,actions=drop
     sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_s3,nw_dst=$ip_h3,idle_timeout=0,actions=drop
 
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_h1,nw_dst=$ip_s4,idle_timeout=0,actions=drop
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_h2,nw_dst=$ip_s4,idle_timeout=0,actions=drop
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_h3,nw_dst=$ip_s4,idle_timeout=0,actions=drop
+
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_s4,nw_dst=$ip_h1,idle_timeout=0,actions=drop
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_s4,nw_dst=$ip_h2,idle_timeout=0,actions=drop
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_s4,nw_dst=$ip_h3,idle_timeout=0,actions=drop
+
+    # terza slice (s3 può essere contattato da h4,h5,h6)
+
+    
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_h4,nw_dst=$ip_s3,idle_timeout=0,actions=set_queue:3,normal
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_h5,nw_dst=$ip_s3,idle_timeout=0,actions=set_queue:3,normal
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_h6,nw_dst=$ip_s3,idle_timeout=0,actions=set_queue:3,normal
 
     sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_s3,nw_dst=$ip_h4,idle_timeout=0,actions=set_queue:3,normal
     sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_s3,nw_dst=$ip_h5,idle_timeout=0,actions=set_queue:3,normal
     sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_s3,nw_dst=$ip_h6,idle_timeout=0,actions=set_queue:3,normal
 
-    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_h1,nw_dst=$ip_s3,idle_timeout=0,actions=drop
-    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_h2,nw_dst=$ip_s3,idle_timeout=0,actions=drop
-    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_h3,nw_dst=$ip_s3,idle_timeout=0,actions=drop
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_h4,nw_dst=$ip_s4,idle_timeout=0,actions=set_queue:3,normal
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_h5,nw_dst=$ip_s4,idle_timeout=0,actions=set_queue:3,normal
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_h6,nw_dst=$ip_s4,idle_timeout=0,actions=set_queue:3,normal
 
-    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_h4,nw_dst=$ip_s3,idle_timeout=0,actions=set_queue:3,normal
-    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_h6,nw_dst=$ip_s3,idle_timeout=0,actions=set_queue:3,normal
-    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_h5,nw_dst=$ip_s3,idle_timeout=0,actions=set_queue:3,normal
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_s4,nw_dst=$ip_h4,idle_timeout=0,actions=set_queue:3,normal
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_s4,nw_dst=$ip_h5,idle_timeout=0,actions=set_queue:3,normal
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_s4,nw_dst=$ip_h6,idle_timeout=0,actions=set_queue:3,normal
+
 
     # Seconda slice h0 e s0 possono contattare s1,s2,s3,s4 ma non possono comunciare tra loro
 
@@ -153,6 +185,22 @@ do
     sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_s2,nw_dst=$ip_s0,idle_timeout=0,actions=set_queue:2,normal
     sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_s3,nw_dst=$ip_s0,idle_timeout=0,actions=set_queue:2,normal
     sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_s4,nw_dst=$ip_s0,idle_timeout=0,actions=set_queue:2,normal
+
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_s1,nw_dst=$ip_s2,idle_timeout=0,actions=drop
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_s1,nw_dst=$ip_s3,idle_timeout=0,actions=drop
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_s1,nw_dst=$ip_s4,idle_timeout=0,actions=drop
+
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_s2,nw_dst=$ip_s1,idle_timeout=0,actions=drop
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_s2,nw_dst=$ip_s3,idle_timeout=0,actions=drop
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_s2,nw_dst=$ip_s4,idle_timeout=0,actions=drop
+
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_s3,nw_dst=$ip_s1,idle_timeout=0,actions=drop
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_s3,nw_dst=$ip_s2,idle_timeout=0,actions=drop
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_s3,nw_dst=$ip_s4,idle_timeout=0,actions=drop
+
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_s4,nw_dst=$ip_s1,idle_timeout=0,actions=drop
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_s4,nw_dst=$ip_s2,idle_timeout=0,actions=drop
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_s4,nw_dst=$ip_s3,idle_timeout=0,actions=drop
     
 
 

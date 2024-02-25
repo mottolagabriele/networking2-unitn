@@ -99,26 +99,30 @@ s1 -> h0 h1 h2 h3 X  X  X  s0 X  X  X  X
 s2 -> h0 h1 h2 h3 X  X  X  s0 X  X  X  X
 s3 -> h0 X  X  X  h4 h5 h6 s0 X  X  X  X
 s4 -> h0 X  X  X  h4 h5 h6 s0 X  X  X  X
-*** Results: X% dropped (X/132 received)
+*** Results: 68% dropped (42/132 received)
 ```
 
 2. client mode: verifying flows in each router and check the virtual queues/slices, e.g.:
 ```bash
-mininet> sh ovs-ofctl dump-flows r1
+mininet> sh ovs-ofctl dump-flows sw0
 ```
 
 ```bash
-mininet> sh ovs-ofctl dump-flows r2
+mininet> sh ovs-ofctl dump-flows sw3
+```
+
+```bash
+
+mininet> sh ovs-vsctl list queue
 ```
 
 3. iperf mode: verifying slices' bandwidth:
-NOT IMPLEMETED YET
-
+NOT YET
 *Case 1: Non-Emergency Scenario* 
 ```bash
 mininet> iperf h1 h4
 *** Iperf: testing TCP bandwidth between h1 and h4 
-*** Results: ['4.78 Mbits/sec', '5.30 Mbits/sec']
+*** Results: ['80.7 Mbits/sec', '81.7 Mbits/sec']
 mininet> iperf h2 h5
 *** Iperf: testing TCP bandwidth between h2 and h5 
 *** Results: ['4.78 Mbits/sec', '5.28 Mbits/sec']
