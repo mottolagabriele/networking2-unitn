@@ -1,6 +1,5 @@
 # README
 
-python3 -m pip install PyQt5 pyautogui pyte pexpect
 # Network Softwarization - Network Slicing - Mottola Gabriele #
 
 The network represents a hypothetical school lab network consisting of two labs, named lab1 and lab2, and an IT office. Each lab comprises three hosts representing students, and there are two servers. In the IT office, there is one admin station and one server.
