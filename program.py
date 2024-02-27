@@ -33,6 +33,9 @@ class NetworkApp(tk.Tk):
         
         self.isolated_state_button = tk.Button(self.frame_top, text="ISOLATED STATE", bg="#007bff", fg="white", relief=tk.FLAT, command=self.on_isolated_state_button_clicked, state=tk.DISABLED)
         self.isolated_state_button.pack(fill=tk.X, pady=5)
+        
+        self.service_state_button = tk.Button(self.frame_top, text="SERVICE STATE", bg="#007bff", fg="white", relief=tk.FLAT, command=self.on_service_state_button_clicked, state=tk.DISABLED)
+        self.service_state_button.pack(fill=tk.X, pady=5)
 
         self.stop_event = threading.Event()
 
@@ -55,7 +58,7 @@ class NetworkApp(tk.Tk):
         # Disabilita il pulsante START e abilita gli altri
         self.start_button.config(state=tk.DISABLED)
         self.stop_button.config(state=tk.NORMAL)
-        self.open_cli.config(state=tk.NORMAL)
+        self.service_state_button.config(state=tk.NORMAL)
         self.normal_state_button.config(state=tk.NORMAL)
         self.full_state_button.config(state=tk.NORMAL)
         self.isolated_state_button.config(state=tk.NORMAL)
@@ -83,11 +86,12 @@ class NetworkApp(tk.Tk):
     def on_stop_button_clicked(self):
         # Disabilita gli altri pulsanti e abilita START
         self.stop_button.config(state=tk.DISABLED)
-        self.open_cli.config(state=tk.DISABLED)
+        self.service_state_button.config(state=tk.DISABLED)
         self.normal_state_button.config(state=tk.DISABLED)
         self.full_state_button.config(state=tk.DISABLED)
         self.isolated_state_button.config(state=tk.DISABLED)
         self.start_button.config(state=tk.NORMAL)
+        self.terminal_output.delete(1.0, tk.END)
 
         # Termina il processo di slicing e chiude il terminale
         self.stop_slicing_scenario()
@@ -123,6 +127,14 @@ class NetworkApp(tk.Tk):
         self.display_output(output.decode("utf-8"))
         self.display_output("Started Isolated State Scenario\n")
         self.network_drawer.isolated_state()
+    
+    def on_service_state_button_clicked(self):
+        # Avvia lo scenario isolato
+        process = subprocess.Popen(['bash', 'service_scenario.sh'], stdout=subprocess.PIPE)
+        output, _ = process.communicate()
+        self.display_output(output.decode("utf-8"))
+        self.display_output("Started Service State Scenario\n")
+        self.network_drawer.clear_state()
 
     def display_output(self, text):
         self.terminal_output.insert(tk.END, text)

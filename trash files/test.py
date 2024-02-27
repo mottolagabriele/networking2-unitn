@@ -86,11 +86,12 @@ class NetworkApp(tk.Tk):
     def on_stop_button_clicked(self):
         # Disabilita gli altri pulsanti e abilita START
         self.stop_button.config(state=tk.DISABLED)
-        self.open_cli.config(state=tk.DISABLED)
+        self.service_state_button.config(state=tk.DISABLED)
         self.normal_state_button.config(state=tk.DISABLED)
         self.full_state_button.config(state=tk.DISABLED)
         self.isolated_state_button.config(state=tk.DISABLED)
         self.start_button.config(state=tk.NORMAL)
+        self.terminal_output.delete(1.0, tk.END)
 
         # Termina il processo di slicing e chiude il terminale
         self.stop_slicing_scenario()

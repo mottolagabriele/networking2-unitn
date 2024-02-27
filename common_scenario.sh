@@ -115,6 +115,22 @@ do
     sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_s4,nw_dst=$ip_s0,idle_timeout=0,actions=set_queue:2,normal
     sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_s4,nw_dst=$ip_s2,idle_timeout=0,actions=set_queue:2,normal
 
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_h1,nw_dst=$ip_s2,idle_timeout=0,actions=drop
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_h2,nw_dst=$ip_s2,idle_timeout=0,actions=drop
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_h3,nw_dst=$ip_s2,idle_timeout=0,actions=drop
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_h4,nw_dst=$ip_s2,idle_timeout=0,actions=drop
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_h5,nw_dst=$ip_s2,idle_timeout=0,actions=drop
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_h6,nw_dst=$ip_s2,idle_timeout=0,actions=drop
+
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_h1,nw_dst=$ip_s4,idle_timeout=0,actions=drop
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_h2,nw_dst=$ip_s4,idle_timeout=0,actions=drop
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_h3,nw_dst=$ip_s4,idle_timeout=0,actions=drop
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_h4,nw_dst=$ip_s4,idle_timeout=0,actions=drop
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_h5,nw_dst=$ip_s4,idle_timeout=0,actions=drop
+    sudo ovs-ofctl add-flow $device ip,priority=65500,nw_src=$ip_h6,nw_dst=$ip_s4,idle_timeout=0,actions=drop
+
+
+
 
     # Assicurati che altri flussi non specificati siano lasciati cadere
     sudo ovs-ofctl add-flow $device priority=1,actions=drop
